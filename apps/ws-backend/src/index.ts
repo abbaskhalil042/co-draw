@@ -18,6 +18,6 @@ wss.on("connection", (ws, request) => {
   }
   ws.on("message", (data) => {
     //*receive message
-    ws.send("Hello");
+    ws.send("Hello");  
   });
 });
