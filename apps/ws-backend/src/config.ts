@@ -1,0 +1,1 @@
+export const JWT_SECRET="dasfaew23feqaef2ef"
