@@ -102,6 +102,16 @@ importers:
         specifier: workspace:*
         version: link:../../packages/typescript-config
 
+  packages/db:
+    dependencies:
+      typescript:
+        specifier: ^5.8.3
+        version: 5.8.3
+    devDependencies:
+      '@repo/typescript-config':
+        specifier: workspace:*
+        version: link:../typescript-config
+
   packages/eslint-config:
     devDependencies:
       '@eslint/js':
