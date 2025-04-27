@@ -156,7 +156,7 @@ const config = {
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
-    "rootEnvPath": "../../../.env",
+    "rootEnvPath": null,
     "schemaEnvPath": "../../../.env"
   },
   "relativePath": "../../../prisma",
@@ -166,11 +166,12 @@ const config = {
     "db"
   ],
   "activeProvider": "postgresql",
+  "postinstall": false,
   "inlineDatasources": {
     "db": {
       "url": {
         "fromEnvVar": "DATABASE_URL",
-        "value": "postgresql://node-postgres_owner:npg_3FBea1tfZAvL@ep-dry-recipe-a475xb0t-pooler.us-east-1.aws.neon.tech/node-postgres?sslmode=require"
+        "value": null
       }
     }
   },
