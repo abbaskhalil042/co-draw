@@ -13,15 +13,17 @@
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
+    "@repo/db": "workspace:* ",
+    "@types/bcrypt": "^5.0.2",
     "@types/express": "^5.0.1",
     "@types/jsonwebtoken": "^9.0.9",
+    "bcrypt": "^5.1.1",
     "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2",
-    "typescript": "^5.8.3",
-    "@repo/db": "workspace:* "
+    "typescript": "^5.8.3"
   },
   "devDependencies": {
-    "nodemon": "^3.1.10",
-    "@repo/typescript-config": "workspace:*"
+    "@repo/typescript-config": "workspace:*",
+    "nodemon": "^3.1.10"
   }
 }
