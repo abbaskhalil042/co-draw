@@ -147,6 +147,7 @@ const config = {
       "fromEnvVar": null
     },
     "config": {
+      "jsTarget": "es5",
       "engineType": "library"
     },
     "binaryTargets": [
@@ -171,17 +172,16 @@ const config = {
     "db"
   ],
   "activeProvider": "postgresql",
-  "postinstall": false,
   "inlineDatasources": {
     "db": {
       "url": {
         "fromEnvVar": "DATABASE_URL",
-        "value": null
+        "value": "postgresql://node-postgres_owner:npg_3FBea1tfZAvL@ep-dry-recipe-a475xb0t-pooler.us-east-1.aws.neon.tech/node-postgres?sslmode=require"
       }
     }
   },
-  "inlineSchema": "generator client {\n  provider = \"prisma-client-js\"\n  output   = \"../src/generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel User {\n  id       String  @id @default(uuid())\n  email    String  @unique\n  password String\n  name     String\n  photo    String?\n  rooms    Room[] //user can have multiple rooms \n  chats    Chat[]\n}\n\nmodel Room {\n  id        Int      @id @default(autoincrement())\n  slug      String   @unique\n  createdAt DateTime @default(now())\n  adminId   String\n  admin     User     @relation(fields: [adminId], references: [id]) //foreing key\n  chatt     Chat[]\n}\n\nmodel Chat {\n  id      Int    @id @default(autoincrement())\n  roomId  Int\n  message String\n  userId  String\n  room    Room   @relation(fields: [roomId], references: [id])\n  user    User   @relation(fields: [userId], references: [id])\n}\n",
-  "inlineSchemaHash": "ee121d76845ac0bca2218c70a7ccd5bce7b7b0fa59c3a864010506efa673f683",
+  "inlineSchema": "generator client {\n  provider = \"prisma-client-js\"\n  output   = \"../src/generated/prisma\"\n  jsTarget = \"es5\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel User {\n  id       String  @id @default(uuid())\n  email    String  @unique\n  password String\n  name     String\n  photo    String?\n  rooms    Room[] //user can have multiple rooms \n  chats    Chat[]\n}\n\nmodel Room {\n  id        Int      @id @default(autoincrement())\n  slug      String   @unique\n  createdAt DateTime @default(now())\n  adminId   String\n  admin     User     @relation(fields: [adminId], references: [id]) //foreing key\n  chatt     Chat[]\n}\n\nmodel Chat {\n  id      Int    @id @default(autoincrement())\n  roomId  Int\n  message String\n  userId  String\n  room    Room   @relation(fields: [roomId], references: [id])\n  user    User   @relation(fields: [userId], references: [id])\n}\n",
+  "inlineSchemaHash": "a797f12add63761180a8d7e6b7be49602fdfc46eab9063c07d55801c2da33555",
   "copyEngine": true
 }
 config.dirname = '/'

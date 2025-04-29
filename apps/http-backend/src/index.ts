@@ -1,9 +1,10 @@
 import express, { Application, Request, Response } from "express";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { prisma } from "@repo/db/client";
-import UserType from "./types/user";
-import { JWT_SECRET } from "./config";
+import { prisma } from "@repo/db";
+import { JWT_SECRET } from "./config.js";
+import { middleware } from "./middleware/middleware.js";
+
 
 const app: Application = express();
 app.use(express.json());
@@ -135,9 +136,68 @@ app.post("/signin", async (req: any, res: any) => {
   }
 });
 
-
 //* room id
 
-app.listen(3000, () => {
-  console.log("Server started on port 3000");
+app.post("/room", middleware, async (req: any, res: any) => {
+  try {
+    const { slug } = req.body;
+
+    const userId = req.userId;
+
+    const room = await prisma.room.create({
+      data: {
+        slug: slug,
+        adminId: userId,
+      },
+      select: {
+        id: true,
+        slug: true,
+        adminId: true,
+      },
+    });
+
+    return res.status(201).json({
+      success: true,
+      message: "Room created successfully",
+      room: room,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+//*get all chats
+
+app.get("/chats", middleware, async (req: any, res: any) => {
+  try {
+    const userId = req.userId;
+    const chats = await prisma.chat.findMany({
+      where: {
+        userId: userId,
+      },
+      select: {
+        id: true,
+        message: true,
+        room: {
+          select: {
+            slug: true,
+          },
+        },
+      },
+    });
+
+    return res.status(200).json({
+      success: true,
+      message: "Chats fetched successfully",
+      chats: chats,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+app.listen(4000, () => {
+  console.log("Server started on port 4000");
 });
