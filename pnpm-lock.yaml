@@ -100,6 +100,9 @@ importers:
 
   apps/ws-backend:
     dependencies:
+      '@repo/db':
+        specifier: workspace:*
+        version: link:../../packages/db
       '@types/jsonwebtoken':
         specifier: ^9.0.9
         version: 9.0.9
@@ -119,6 +122,9 @@ importers:
       '@repo/typescript-config':
         specifier: workspace:*
         version: link:../../packages/typescript-config
+      tsx:
+        specifier: ^4.19.3
+        version: 4.19.3
 
   packages/db:
     dependencies:
@@ -135,6 +141,9 @@ importers:
       '@repo/typescript-config':
         specifier: workspace:*
         version: link:../typescript-config
+      tsx:
+        specifier: ^4.19.3
+        version: 4.19.3
 
   packages/eslint-config:
     devDependencies:

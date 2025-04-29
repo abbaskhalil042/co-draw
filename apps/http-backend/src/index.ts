@@ -5,7 +5,6 @@ import { prisma } from "@repo/db";
 import { JWT_SECRET } from "./config.js";
 import { middleware } from "./middleware/middleware.js";
 
-
 const app: Application = express();
 app.use(express.json());
 
@@ -140,18 +139,37 @@ app.post("/signin", async (req: any, res: any) => {
 
 app.post("/room", middleware, async (req: any, res: any) => {
   try {
-    const { slug } = req.body;
+    const { name } = req.body;
+    console.log(name)
 
     const userId = req.userId;
 
-    const room = await prisma.room.create({
+    if (!name) {
+      return res.status(400).json({
+        error: "Missing required fields",
+      });
+    }
+
+    const room = await prisma.room.findUnique({
+      where: {
+        name: name,
+      },
+    });
+
+    if (room) {
+      return res.status(409).json({
+        error: "Room already exists",
+      });
+    }
+
+    const newRoom = await prisma.room.create({
       data: {
-        slug: slug,
+        name: name,
         adminId: userId,
       },
       select: {
         id: true,
-        slug: true,
+        name: true,
         adminId: true,
       },
     });
@@ -159,7 +177,7 @@ app.post("/room", middleware, async (req: any, res: any) => {
     return res.status(201).json({
       success: true,
       message: "Room created successfully",
-      room: room,
+      room: newRoom,
     });
   } catch (error) {
     console.log(error);
@@ -169,22 +187,27 @@ app.post("/room", middleware, async (req: any, res: any) => {
 
 //*get all chats
 
-app.get("/chats", middleware, async (req: any, res: any) => {
+app.get("/chats/:roomId", middleware, async (req: any, res: any) => {
   try {
+    const roomId = req.params.roomId;
     const userId = req.userId;
     const chats = await prisma.chat.findMany({
       where: {
-        userId: userId,
+        roomId: Number(roomId),
       },
       select: {
-        id: true,
+        id: true, 
         message: true,
         room: {
           select: {
-            slug: true,
+            name: true,
           },
         },
       },
+      take: 10,
+      orderBy: {
+        id: "desc",
+      }
     });
 
     return res.status(200).json({

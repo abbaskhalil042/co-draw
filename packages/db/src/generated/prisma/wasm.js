@@ -127,7 +127,7 @@ exports.Prisma.UserScalarFieldEnum = {
 
 exports.Prisma.RoomScalarFieldEnum = {
   id: 'id',
-  slug: 'slug',
+  name: 'name',
   createdAt: 'createdAt',
   adminId: 'adminId'
 };
