@@ -1,102 +1,154 @@
-import Image, { type ImageProps } from "next/image";
-import { Button } from "@repo/ui/button";
-import styles from "./page.module.css";
+"use client";
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 
-type Props = Omit<ImageProps, "src"> & {
-  srcLight: string;
-  srcDark: string;
-};
+const Page = () => {
+  const [roomId, setRoomId] = useState('');
+  const [isHovered, setIsHovered] = useState(false);
+  const router = useRouter();
 
-const ThemeImage = (props: Props) => {
-  const { srcLight, srcDark, ...rest } = props;
+  const handleJoinRoom = () => {
+    if (roomId.trim()) {
+      router.push(`/chat/${roomId}`);
+    } else {
+      alert('Please enter a valid Room ID');
+    }
+  };
 
   return (
-    <>
-      <Image {...rest} src={srcLight} className="imgLight" />
-      <Image {...rest} src={srcDark} className="imgDark" />
-    </>
-  );
-};
-
-export default function Home() {
-  return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <ThemeImage
-          className={styles.logo}
-          srcLight="turborepo-dark.svg"
-          srcDark="turborepo-light.svg"
-          alt="Turborepo logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol>
-          <li>
-            Get started by editing <code>apps/web/app/page.tsx</code>
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
-
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new/clone?demo-description=Learn+to+implement+a+monorepo+with+a+two+Next.js+sites+that+has+installed+three+local+packages.&demo-image=%2F%2Fimages.ctfassets.net%2Fe5382hct74si%2F4K8ZISWAzJ8X1504ca0zmC%2F0b21a1c6246add355e55816278ef54bc%2FBasic.png&demo-title=Monorepo+with+Turborepo&demo-url=https%3A%2F%2Fexamples-basic-web.vercel.sh%2F&from=templates&project-name=Monorepo+with+Turborepo&repository-name=monorepo-turborepo&repository-url=https%3A%2F%2Fgithub.com%2Fvercel%2Fturborepo%2Ftree%2Fmain%2Fexamples%2Fbasic&root-directory=apps%2Fdocs&skippable-integrations=1&teamSlug=vercel&utm_source=create-turbo"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            href="https://turborepo.com/docs?utm_source"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.secondary}
-          >
-            Read our docs
-          </a>
+    <div style={{
+      minHeight: '100vh',
+      backgroundColor: '#0f172a',
+      color: 'white',
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'center',
+      padding: '1rem',
+      fontFamily: "'Inter', sans-serif"
+    }}>
+      <div style={{
+        maxWidth: '28rem',
+        width: '100%',
+        backgroundColor: '#1e293b',
+        borderRadius: '1rem',
+        padding: '2rem',
+        boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
+        border: '1px solid #334155',
+        transition: 'all 0.3s ease',
+        ...(isHovered && { boxShadow: '0 0 0 4px rgba(124, 58, 237, 0.1)' })
+      }}>
+        <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
+          <h1 style={{
+            fontSize: '2.25rem',
+            fontWeight: '800',
+            background: 'linear-gradient(to right, #a855f7, #ec4899)',
+            WebkitBackgroundClip: 'text',
+            backgroundClip: 'text',
+            color: 'transparent',
+            marginBottom: '0.5rem'
+          }}>
+            Connect Instantly
+          </h1>
+          <p style={{ color: '#94a3b8', fontSize: '0.875rem' }}>
+            Secure, real-time messaging for everyone
+          </p>
         </div>
-        <Button appName="web" className={styles.secondary}>
-          Open alert
-        </Button>
-      </main>
-      <footer className={styles.footer}>
-        <a
-          href="https://vercel.com/templates?search=turborepo&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          href="https://turborepo.com?utm_source=create-turbo"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to turborepo.com →
-        </a>
-      </footer>
+
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+          <div>
+            <label style={{
+              display: 'block',
+              fontSize: '0.875rem',
+              fontWeight: '500',
+              color: '#cbd5e1',
+              marginBottom: '0.5rem'
+            }}>
+              Room ID
+            </label>
+            <input
+              style={{
+                width: '100%',
+                padding: '0.75rem 1rem',
+                backgroundColor: '#334155',
+                border: '1px solid #475569',
+                borderRadius: '0.5rem',
+                fontSize: '1rem',
+                color: 'white',
+                outline: 'none',
+                transition: 'all 0.2s ease',
+                ...(roomId && { borderColor: '#7c3aed' })
+              }}
+              type="text"
+              placeholder="Enter your room code"
+              value={roomId}
+              onChange={(e) => setRoomId(e.target.value)}
+              onKeyDown={(e) => e.key === 'Enter' && handleJoinRoom()}
+            />
+          </div>
+
+          <button
+            onClick={handleJoinRoom}
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+            style={{
+              width: '100%',
+              padding: '0.75rem 1.5rem',
+              borderRadius: '0.5rem',
+              fontWeight: '500',
+              fontSize: '1rem',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '0.5rem',
+              background: isHovered 
+                ? '#7c3aed' 
+                : 'linear-gradient(to right, #8b5cf6, #ec4899)',
+              color: 'white',
+              border: 'none',
+              cursor: 'pointer',
+              transition: 'all 0.3s ease',
+              boxShadow: isHovered 
+                ? '0 10px 15px -3px rgba(124, 58, 237, 0.3)'
+                : 'none'
+            }}
+          >
+            <span>Join Room</span>
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 20 20"
+              fill="none"
+              style={{
+                transition: 'transform 0.3s ease',
+                transform: isHovered ? 'translateX(4px)' : 'none'
+              }}
+            >
+              <path
+                d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z"
+                fill="currentColor"
+              />
+            </svg>
+          </button>
+        </div>
+
+        <div style={{
+          marginTop: '2rem',
+          paddingTop: '1.5rem',
+          borderTop: '1px solid #334155',
+          textAlign: 'center'
+        }}>
+          <p style={{ color: '#94a3b8', fontSize: '0.875rem' }}>
+            Don't have a room? Create one by entering a new ID
+          </p>
+        </div>
+      </div>
+
+      <div style={{ marginTop: '2rem', color: '#64748b', fontSize: '0.75rem', textAlign: 'center' }}>
+        <p>Secure • Encrypted • No Tracking</p>
+      </div>
     </div>
   );
-}
+};
+
+export default Page;

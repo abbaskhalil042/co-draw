@@ -140,7 +140,7 @@ app.post("/signin", async (req: any, res: any) => {
 app.post("/room", middleware, async (req: any, res: any) => {
   try {
     const { name } = req.body;
-    console.log(name)
+    console.log(name);
 
     const userId = req.userId;
 
@@ -196,7 +196,7 @@ app.get("/chats/:roomId", middleware, async (req: any, res: any) => {
         roomId: Number(roomId),
       },
       select: {
-        id: true, 
+        id: true,
         message: true,
         room: {
           select: {
@@ -207,13 +207,38 @@ app.get("/chats/:roomId", middleware, async (req: any, res: any) => {
       take: 10,
       orderBy: {
         id: "desc",
-      }
+      },
     });
 
     return res.status(200).json({
       success: true,
       message: "Chats fetched successfully",
       chats: chats,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+app.get("/room/:slug", middleware, async (req: any, res: any) => {
+  try {
+    const slug = req.params.slug;
+    const room = await prisma.room.findUnique({
+      where: {
+        name: slug,
+      },
+      select: {
+        id: true,
+        name: true,
+        adminId: true,
+      },
+    });
+
+    return res.status(200).json({
+      success: true,
+      message: "Room fetched successfully",
+      room: room,
     });
   } catch (error) {
     console.log(error);
